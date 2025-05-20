@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="keywords" content="palabra clave 1, palabra clave 2, palabra clave 3">
     <title>Juego Memory</title>
+     <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -14,73 +16,6 @@
     <h1>🧠 Juego de Memoria</h1>
     <div id="mesa"></div>
 
-<script>
-const grupoTarjetas = ["🦄", "🍦", "🌈", "👽", "👾", "🤖", "👹", "👺"]
-const totalTarjetas = [...grupoTarjetas, ...grupoTarjetas]
-
-let primeraSeleccion = null
-let bloquearClick = false
-let paresEncontrados = 0
-let tiempoInicio
-
-const barajaTarjetas = () => {
-    return totalTarjetas.sort(() => Math.random() - 0.5)
-};
-
-const reparteTarjetas = () => {
-    const mesa = document.querySelector("#mesa")
-    mesa.innerHTML = ""
-    const tarjetasBarajadas = barajaTarjetas()
-
-    tarjetasBarajadas.forEach(emoji => {
-        const tarjeta = document.createElement("div")
-        tarjeta.className = "tarjeta";
-        tarjeta.innerHTML = `<div class="tarjeta__contenido">${emoji}</div>`
-
-        tarjeta.addEventListener("click", () => {
-            if (bloquearClick || tarjeta.classList.contains("descubierta")) return
-            tarjeta.classList.add("descubierta")
-
-            if (!primeraSeleccion) {
-                primeraSeleccion = tarjeta
-            } else {
-                const segundaSeleccion = tarjeta
-                const emoji1 = primeraSeleccion.querySelector(".tarjeta__contenido").innerText
-                const emoji2 = segundaSeleccion.querySelector(".tarjeta__contenido").innerText
-
-                if (emoji1 === emoji2) {
-                    primeraSeleccion = null
-                    paresEncontrados++
-
-                    // ✅ Si se encontraron todos los pares, mostrar alerta con tiempo
-                    if (paresEncontrados === grupoTarjetas.length) {
-                        const tiempoFin = Date.now()
-                        const segundos = Math.floor((tiempoFin - tiempoInicio) / 1000)
-                        alert(`🎉 ¡Felicidades, lo has completado en ${segundos} segundos!`)
-                    }
-
-                } else {
-                    bloquearClick = true
-                    setTimeout(() => {
-                        primeraSeleccion.classList.remove("descubierta")
-                        segundaSeleccion.classList.remove("descubierta")
-                        primeraSeleccion = null
-                        bloquearClick = false
-                    }, 1000)
-                }
-            }
-        })
-
-        mesa.appendChild(tarjeta)
-    })
-
-    // 🕒 Inicia el conteo de tiempo al repartir
-    paresEncontrados = 0
-    tiempoInicio = Date.now()
-}
-
-reparteTarjetas()
-</script>
 </body>
 
 </html>
